@@ -40,10 +40,16 @@
 \section{Connessione al DB (OO)}
 \begin{lstlisting}[language=PHP]
 $con = new mysqli("localhost","name-of-user","password-of-user","db-name");
+if($con->connect_errno){
+    die("Connection failed: " . $con->connect_error);
+}
 \end{lstlisting}
 \section{Esecuzione query (OO)}
 \begin{lstlisting}[language=PHP]
 $res = $con->query($query);
+if(!$res){
+    die("Query failed: " . $con->error);
+}
 \end{lstlisting}
 \section{Ottenere il risultato (OO)}
 \begin{lstlisting}[language=PHP]
