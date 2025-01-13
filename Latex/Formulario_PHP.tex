@@ -1,0 +1,86 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage[italian]{babel}
+\usepackage{geometry}
+\geometry{margin=2cm}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\title{Formulario PHP-SQL}
+\date{}
+\author{}
+
+\begin{document}
+\maketitle
+\section{Connessione al DB (OO)}
+\begin{lstlisting}[language=PHP]
+$con = new mysqli("localhost","name-of-user","password-of-user","db-name");
+\end{lstlisting}
+\section{Esecuzione query (OO)}
+\begin{lstlisting}[language=PHP]
+$res = $con->query($query);
+\end{lstlisting}
+\section{Ottenere il risultato (OO)}
+\begin{lstlisting}[language=PHP]
+$row = $res->fetch_assoc(); // una riga
+
+while($row = $res->fetch_assoc()){
+    // tutte le righe
+}
+
+$row['nome_colonna']; // valore nella colonna
+
+$res->num_rows; // numero di righe SELECT
+$con->affected_rows; // numero di righe UPDATE, DELETE, INSERT
+\end{lstlisting}
+\section{Chiudere la connessione}
+\begin{lstlisting}[language=PHP]
+$con->close();
+\end{lstlisting}
+\section{SQL Injection}
+\begin{lstlisting}[language=PHP]
+$query = "SELECT * FROM users WHERE username = ?";
+$stmt = $con->prepare($query); // prepara la query
+$stmt->bind_param("s", $username); // s = string, i = integer, d = double, b = blob
+$stmt->execute(); // esegue la query
+$res = $stmt->get_result();
+// something
+$stmt->close();
+\end{lstlisting}
+\section{Transazioni (cenni)}
+\begin{lstlisting}[language=PHP]
+$con->begin_transaction();
+try {
+    // query
+    $con->commit();
+} catch(Exception $e) {
+    $con->rollback();
+    throw $e;
+}
+\end{lstlisting}
+\end{document}
