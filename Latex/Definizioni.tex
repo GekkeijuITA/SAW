@@ -1,0 +1,92 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage[italian]{babel}
+\usepackage{geometry}
+\geometry{margin=2cm}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\title{Definizioni utili}
+\date{}
+\author{}
+\begin{document}
+\maketitle 
+\section{Cookie}
+Un cookie è un piccolo testo, contenente informazioni uniche, che il web invia nell'header HTTP. Il browser del client tiene una lista di cookie e siti web. Quando l'utente ritorna su un sito web, il browser prenderà automaticamente i cookie (sempre che non siano scaduti).
+\begin{itemize}
+    \item \textbf{Secure}: il cookie può essere inviato solo su connessioni HTTPS (default: no)
+    \item \textbf{HttpOnly}: il cookie non è accessibile via JavaScript (default: no)
+    \item \textbf{SameSite}: \begin{itemize}
+        \item \textbf{Strict}: può essere inviato solo tra lo stesso dominio
+        \item \textbf{Lax}: può essere inviato tra domini diversi con stessa origine
+        \item \textbf{None}: nessuna restrizione
+    \end{itemize}
+\end{itemize}
+\subsection{Interazione Client-Server}
+\begin{enumerate}
+    \item Il client fa una richiesta al server
+    \item Il server risponde con un cookie nell'header HTTP (Set-Cookie)
+    \item Il client per ogni richiesta successiva invia il cookie nell'header HTTP (Cookie) controllandone la validità
+\end{enumerate}
+\subsection{In PHP}
+\begin{lstlisting}[language=PHP]
+setcookie("nome","valore",tempo, "path", "domain", secure, httponly); // set
+$_COOKIE["chiave"]; // get
+\end{lstlisting}
+\section{Sessione}
+Il controllo di sessione permette di tener traccia dell'utente durante la sua interazione con un sito web.
+\subsection{Interazione Client-Server}
+\begin{enumerate}
+    \item Il client fa una richiesta al server
+    \item Il server risponde con un cookie contentente la session ID nell'header HTTP (Set-Cookie)
+    \item Il client per ogni richiesta successiva invia il cookie nell'header HTTP (Cookie) e il server lo usa per identificare la sessione e la validità
+\end{enumerate}
+\subsection{In PHP}
+\begin{lstlisting}[language=PHP]
+session_start(); // sempre all'inizio del file php
+$_SESSION["chiave"] = valore // set
+$_SESSION["chiave"] // get
+unset($_SESSION["chiave"]) // rilascio della variabile di sessione
+session_destroy() // distrugge la sessione
+\end{lstlisting}
+\section{PWA}
+Una PWA (Progressive Web Application) è un tipo di applicazione web che può essere installata su un dispositivo come applicazione standalone. Devono essere servite su una connessione sicura a causa del Service Worker.
+\subsection{Application Shell Architecture}
+Prevede il caricamento iniziale di una struttura base dell'applicazione web (applicazione shell) che rimane costante e viene popolata dinamicamente con i dati. Usa chiamate asincrone e modifica del DOM.
+\subsection{Service Worker}
+Script JavaScript che funziona in background, separato dall'applicazione web, che gestisce la cache, le notifiche push e le richieste di rete, permette di fruire dell'applicazione anche offline.
+\subsection{Manifest JSON}
+File che descrive come la PWA deve essere visualizzata sui dispositivi degli utenti:
+\begin{itemize}
+    \item \textbf{name} e \textbf{short\_name}: nome e nome breve della PWA
+    \item \textbf{icons}: array di oggetti che rappresentano le icone che verranno usate dalla PWA
+    \item \textbf{start\_url}: URL da cui iniziare la navigazione
+    \item \textbf{display}: specifica come deve essere visualizzata la PWA
+    \item \textbf{theme\_color} e \textbf{background\_color}: per personalizzare l'aspetto della PWA
+\end{itemize}
+\end{document}
